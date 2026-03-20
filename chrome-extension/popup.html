@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { width: 340px; padding: 16px; font-family: system-ui; background: #0f172a; color: #e2e8f0; margin: 0; }
+    h1 { font-size: 16px; margin: 0 0 12px; }
+    .tracker-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #1e293b; }
+    .tracker-name { font-weight: 500; }
+    .tracker-time { font-family: monospace; color: #818cf8; }
+    .add-section { margin-top: 12px; }
+    input { background: #1e293b; border: 1px solid #334155; color: #e2e8f0; padding: 6px 8px; border-radius: 4px; width: 100%; box-sizing: border-box; margin-bottom: 6px; }
+    button { background: #6366f1; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; }
+    .remove-btn { background: none; color: #ef4444; font-size: 12px; padding: 2px 6px; border: none; cursor: pointer; }
+    .empty { color: #64748b; font-size: 13px; padding: 8px 0; }
+  </style>
+</head>
+<body>
+  <h1>&#128065; ThirdEye</h1>
+  <div id="trackerList"></div>
+  <div class="add-section">
+    <input id="urlInput" placeholder="URL pattern (e.g. v0.dev)" />
+    <input id="nameInput" placeholder="Display name (e.g. V0 AI)" />
+    <button id="addBtn">Add Tracker</button>
+  </div>
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

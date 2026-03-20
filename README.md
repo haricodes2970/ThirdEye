@@ -1,102 +1,145 @@
-# ThirdEye
+# 👁 ThirdEye — Personal AI Tool Usage Tracker
 
-ThirdEye is a personal AI tool usage tracker that automatically measures how much time you spend on AI tools like ChatGPT, Claude, and Grok. It runs silently in the background — a Chrome extension tracks your browser activity, a VS Code extension tracks your coding sessions, and a Next.js dashboard visualizes everything in one place. All data is stored in your own Supabase project with a single hardcoded user ID, requiring no login or manual input.
+> Automatically track how much time you spend on AI tools and coding — no manual input, ever.
 
----
-
-## Supabase Setup
-
-1. Go to [supabase.com](https://supabase.com) → **New Project** (free tier)
-2. After the project is ready, go to **Settings → API** and copy:
-   - **Project URL** (e.g. `https://xxxxxxxxxxxx.supabase.co`)
-   - **anon (public)** key
-3. Generate a UUID for yourself at [uuidgenerator.net](https://www.uuidgenerator.net/) — this is your permanent `user_id`
-4. Open the **SQL Editor** in your Supabase dashboard and run the contents of [`supabase/migrations/001_init.sql`](supabase/migrations/001_init.sql)
-5. In the migration SQL, replace all three occurrences of `'your-uuid-here'` with your actual UUID before running, **or** run the migration first then update the policies:
-   ```sql
-   DROP POLICY "User reads own data" ON time_entries;
-   DROP POLICY "User inserts own data" ON time_entries;
-   DROP POLICY "User updates own data" ON time_entries;
-
-   CREATE POLICY "User reads own data" ON time_entries FOR SELECT USING (user_id = 'YOUR-UUID'::uuid);
-   CREATE POLICY "User inserts own data" ON time_entries FOR INSERT WITH CHECK (user_id = 'YOUR-UUID'::uuid);
-   CREATE POLICY "User updates own data" ON time_entries FOR UPDATE USING (user_id = 'YOUR-UUID'::uuid);
-   ```
+<!-- Add a screenshot here once deployed: ![ThirdEye Dashboard](docs/screenshot.png) -->
 
 ---
 
-## Chrome Extension — Install
+## What It Tracks
 
-1. Open `chrome-extension/src/supabase-client.js` and replace:
-   ```js
-   const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-   const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
-   const USER_ID = 'YOUR_UUID';
-   ```
-2. Build the extension:
-   ```bash
-   cd chrome-extension
-   npm install
-   npm run build
-   ```
-3. Open Chrome → go to `chrome://extensions`
-4. Enable **Developer mode** (top right toggle)
-5. Click **Load unpacked** → select the `chrome-extension/dist/` folder
-6. The ThirdEye icon will appear in your toolbar — click it to see today's times
+| Source | Tracks |
+|--------|--------|
+| **Chrome Extension** | Time on ChatGPT, Claude, Grok + any custom AI URL you add |
+| **VS Code Extension** | Active coding time, project name, git commits per day |
 
-Tracks **ChatGPT**, **Claude**, and **Grok** by default. Add custom AI tool URLs via the popup.
+Everything is written to your own **Supabase** database and visualised on a **Next.js dashboard** you can embed in your portfolio.
 
 ---
 
-## VS Code Extension — Install
+## Architecture
 
-Works in **VS Code, Cursor, and Antigravity**. Tracks active coding time, project name, and git commits automatically.
-
-1. Build the extension:
-   ```bash
-   cd vscode-extension
-   npm install
-   npm run compile
-   ```
-2. Press `F5` in VS Code to launch an Extension Development Host, or copy the folder to your extensions directory
-3. Open **Settings** (`Ctrl+,`) and search for `thirdeye`, then fill in:
-   ```json
-   {
-     "thirdeye.supabaseUrl": "https://your-project.supabase.co",
-     "thirdeye.supabaseAnonKey": "your-anon-key",
-     "thirdeye.userId": "your-uuid"
-   }
-   ```
-4. Open any workspace folder — `$(eye) ThirdEye` appears in the status bar and tracking begins
+```
+┌──────────────────────┐    ┌──────────────────────┐    ┌───────────────────────┐
+│  Chrome Extension     │    │  VS Code Extension    │    │  Next.js Dashboard     │
+│                       │    │  (Cursor/Antigravity) │    │                        │
+│  • AI website time    │    │  • Coding time        │    │  • Time per tool/day   │
+│  • Custom URL add     │    │  • Project name       │    │  • Activity heatmap    │
+│                       │    │  • Git commit count   │    │  • Portfolio embed     │
+└───────┬──────────────┘    └────────┬──────────────┘    └────────┬──────────────┘
+        │                            │                             │
+        └────────────┬───────────────┘                             │
+                     ▼                                             │
+              ┌──────────────────┐                                 │
+              │    Supabase      │◄────────────────────────────────┘
+              │  time_entries    │
+              └──────────────────┘
+```
 
 ---
 
-## Dashboard — Setup
+## Tech Stack
 
-1. Fill in your credentials:
-   ```bash
-   # dashboard/.env.local
-   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   NEXT_PUBLIC_USER_ID=your-uuid
-   ```
-2. Run the dev server:
-   ```bash
-   cd dashboard
-   npm install
-   npm run dev
-   ```
-3. Open [http://localhost:3000](http://localhost:3000) — see all your tracking data in one place
+![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat-square&logo=next.js)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=flat-square&logo=supabase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Tailwind](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
+![Chrome](https://img.shields.io/badge/Chrome_MV3-4285F4?style=flat-square&logo=googlechrome&logoColor=white)
 
-### Portfolio Embed
+---
 
-Embed your AI usage stats anywhere with an iframe:
+## Quick Start
+
+### 1. Create a free Supabase project
+
+Go to [supabase.com](https://supabase.com) → **New Project** (free tier is enough).
+
+### 2. Run the migration
+
+Open **SQL Editor** in your Supabase dashboard and paste the contents of [`supabase/migrations/001_init.sql`](supabase/migrations/001_init.sql).
+
+### 3. Generate your UUID
+
+Go to [uuidgenerator.net](https://www.uuidgenerator.net/) and copy a UUID — this is your permanent `user_id`.
+
+### 4. Replace placeholders in all three components
+
+**Chrome extension** — open `chrome-extension/src/supabase-client.js`:
+```js
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const USER_ID = 'YOUR_UUID';
+```
+
+**VS Code extension** — open Settings (`Ctrl+,`) and search `thirdeye`:
+```json
+{
+  "thirdeye.supabaseUrl": "https://YOUR_PROJECT.supabase.co",
+  "thirdeye.supabaseAnonKey": "YOUR_ANON_KEY",
+  "thirdeye.userId": "YOUR_UUID"
+}
+```
+
+**Dashboard** — create `dashboard/.env.local` (copy from `dashboard/.env.example`):
+```env
+NEXT_PUBLIC_SUPABASE_URL=https://YOUR_PROJECT.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_ANON_KEY
+NEXT_PUBLIC_USER_ID=YOUR_UUID
+```
+
+Also replace `'your-uuid-here'` in the RLS policies — see [SETUP.md](SETUP.md) for the exact SQL.
+
+### 5. Load the Chrome extension
+
+```bash
+cd chrome-extension
+npm install
+npm run build
+```
+
+Open `chrome://extensions` (or `brave://extensions`) → enable **Developer mode** → **Load unpacked** → select `chrome-extension/dist/`.
+
+### 6. Install the VS Code extension
+
+```bash
+cd vscode-extension
+npm install
+npm run compile
+```
+
+Press `Ctrl+Shift+P` → **Developer: Install Extension from Location** → select the `vscode-extension/` folder.
+
+The `$(eye) ThirdEye` indicator appears in the status bar when tracking starts.
+
+### 7. Deploy the dashboard to Vercel
+
+```bash
+cd dashboard
+npm install
+npx vercel --prod
+```
+
+Set the three environment variables in the Vercel dashboard when prompted.
+
+---
+
+## Add Custom AI Tools
+
+Click the ThirdEye icon in your browser toolbar → scroll to **Add Tracker** → enter a URL pattern (e.g. `perplexity.ai`) and a display name → **Add**.
+
+The tracker appears in the list immediately and starts accumulating time when you visit that URL.
+
+---
+
+## Portfolio Embed
+
+Embed your live AI usage stats anywhere with an iframe:
 
 ```html
 <iframe
-  src="https://YOUR_DEPLOYED_URL/embed/YOUR_USER_ID"
+  src="https://srihariprasad.vercel.app/embed/YOUR_USER_ID"
   width="100%"
-  height="200"
+  height="220"
   frameborder="0"
   style="border-radius: 12px; max-width: 400px;"
 ></iframe>
@@ -105,7 +148,7 @@ Embed your AI usage stats anywhere with an iframe:
 Or fetch JSON for a custom widget:
 
 ```
-GET https://YOUR_DEPLOYED_URL/api/embed?userId=YOUR_USER_ID
+GET https://srihariprasad.vercel.app/api/embed?userId=YOUR_USER_ID
 ```
 
 ---
@@ -114,38 +157,45 @@ GET https://YOUR_DEPLOYED_URL/api/embed?userId=YOUR_USER_ID
 
 ```
 ThirdEye/
-  supabase/
-    migrations/
-      001_init.sql              # Full schema, indexes, upsert function, RLS, realtime
-  chrome-extension/
-    src/
-      background.js             # Service worker — timer logic + Supabase flush
-      trackers.js               # Default + custom tracker management
-      supabase-client.js        # Supabase client credentials
-      popup.js                  # Popup UI logic
-    popup.html                  # Extension popup
-    manifest.json               # MV3 manifest
-  vscode-extension/
-    src/
-      extension.ts              # Activate, tick counter, flush interval
-      tracker.ts                # getProjectName() from workspace folder
-      git.ts                    # getTodayCommitCount() via git rev-list
-      supabase.ts               # Supabase client + upsertTimeEntry()
-    package.json                # Extension manifest + esbuild script
-  dashboard/
-    src/
-      app/
-        page.tsx                # Main dashboard (Server Component)
-        embed/[userId]/page.tsx # Public portfolio embed route
-        api/embed/route.ts      # JSON API for JS widget embed
-      components/
-        TotalTimeCards.tsx      # Monthly summary cards
-        DailyBarChart.tsx       # 30-day activity bar chart
-        ToolBreakdown.tsx       # AI tool pie chart
-        ProjectTable.tsx        # Projects + hours + commits
-        Heatmap.tsx             # GitHub-style activity heatmap
-        LiveIndicator.tsx       # Realtime "Active on X" indicator
-      lib/
-        supabase.ts             # Supabase client
-        queries.ts              # getDailySummary, getToolBreakdown, getProjects
+├── supabase/
+│   └── migrations/
+│       └── 001_init.sql          # Schema, indexes, upsert function, RLS, realtime
+├── chrome-extension/
+│   ├── manifest.json             # MV3 manifest
+│   ├── popup.html                # Extension popup UI
+│   └── src/
+│       ├── background.js         # Service worker — timer + alarm flush
+│       ├── trackers.js           # Default + custom tracker management
+│       ├── supabase-client.js    # ⚠️ Fill in your credentials here
+│       └── popup.js              # Popup logic
+├── vscode-extension/
+│   ├── package.json              # Extension manifest
+│   └── src/
+│       ├── extension.ts          # Activate, tick counter, flush interval
+│       ├── tracker.ts            # getProjectName() from workspace
+│       ├── git.ts                # getTodayCommitCount() via git rev-list
+│       └── supabase.ts           # Reads credentials from VS Code settings
+├── dashboard/
+│   ├── .env.example              # Copy to .env.local and fill in credentials
+│   └── src/
+│       ├── app/
+│       │   ├── page.tsx          # Main dashboard (Server Component)
+│       │   ├── embed/[userId]/   # Portfolio embed route
+│       │   └── api/embed/        # JSON API endpoint
+│       └── components/
+│           ├── TotalTimeCards.tsx
+│           ├── DailyBarChart.tsx
+│           ├── ToolBreakdown.tsx
+│           ├── ProjectTable.tsx
+│           ├── Heatmap.tsx
+│           ├── LiveIndicator.tsx
+│           └── MeshBackground.tsx
+├── SETUP.md                      # Detailed Supabase setup guide
+└── README.md
 ```
+
+---
+
+## License
+
+MIT © [Srihari Prasad S](LICENSE)

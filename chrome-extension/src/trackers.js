@@ -1,7 +1,7 @@
 const DEFAULT_TRACKERS = [
   { name: 'ChatGPT', urlPattern: 'chatgpt.com' },
   { name: 'Claude',  urlPattern: 'claude.ai' },
-  { name: 'Grok',   urlPattern: 'grok.x.ai' },
+  { name: 'Grok',   urlPattern: 'grok.com' },
 ];
 
 async function getCustomTrackers() {

@@ -48,21 +48,52 @@ Tracks **ChatGPT**, **Claude**, and **Grok** by default. Add custom AI tool URLs
 
 ---
 
+## VS Code Extension — Install
+
+Works in **VS Code, Cursor, and Antigravity**. Tracks active coding time, project name, and git commits automatically.
+
+1. Build the extension:
+   ```bash
+   cd vscode-extension
+   npm install
+   npm run compile
+   ```
+2. Press `F5` in VS Code to launch an Extension Development Host, or copy the folder to your extensions directory
+3. Open **Settings** (`Ctrl+,`) and search for `thirdeye`, then fill in:
+   ```json
+   {
+     "thirdeye.supabaseUrl": "https://your-project.supabase.co",
+     "thirdeye.supabaseAnonKey": "your-anon-key",
+     "thirdeye.userId": "your-uuid"
+   }
+   ```
+4. Open any workspace folder — `$(eye) ThirdEye` appears in the status bar and tracking begins
+
+---
+
 ## Project Structure
 
 ```
 ThirdEye/
   supabase/
     migrations/
-      001_init.sql          # Full schema, indexes, upsert function, RLS, realtime
+      001_init.sql              # Full schema, indexes, upsert function, RLS, realtime
   chrome-extension/
     src/
-      background.js         # Service worker — timer logic + Supabase flush
-      trackers.js           # Default + custom tracker management
-      supabase-client.js    # Supabase client (fill in your credentials)
-      popup.js              # Popup UI logic
-    popup.html              # Extension popup
-    manifest.json           # MV3 manifest
-    vite.config.js          # Bundles background.js
-    vite.config.popup.js    # Bundles popup.js
+      background.js             # Service worker — timer logic + Supabase flush
+      trackers.js               # Default + custom tracker management
+      supabase-client.js        # Supabase client credentials
+      popup.js                  # Popup UI logic
+    popup.html                  # Extension popup
+    manifest.json               # MV3 manifest
+    vite.config.js              # Bundles background.js
+    vite.config.popup.js        # Bundles popup.js
+  vscode-extension/
+    src/
+      extension.ts              # Activate, tick counter, flush interval
+      tracker.ts                # getProjectName() from workspace folder
+      git.ts                    # getTodayCommitCount() via git rev-list
+      supabase.ts               # Supabase client + upsertTimeEntry()
+    package.json                # Extension manifest + esbuild script
+    tsconfig.json               # TypeScript config
 ```

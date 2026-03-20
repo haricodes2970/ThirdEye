@@ -71,6 +71,45 @@ Works in **VS Code, Cursor, and Antigravity**. Tracks active coding time, projec
 
 ---
 
+## Dashboard — Setup
+
+1. Fill in your credentials:
+   ```bash
+   # dashboard/.env.local
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   NEXT_PUBLIC_USER_ID=your-uuid
+   ```
+2. Run the dev server:
+   ```bash
+   cd dashboard
+   npm install
+   npm run dev
+   ```
+3. Open [http://localhost:3000](http://localhost:3000) — see all your tracking data in one place
+
+### Portfolio Embed
+
+Embed your AI usage stats anywhere with an iframe:
+
+```html
+<iframe
+  src="https://YOUR_DEPLOYED_URL/embed/YOUR_USER_ID"
+  width="100%"
+  height="200"
+  frameborder="0"
+  style="border-radius: 12px; max-width: 400px;"
+></iframe>
+```
+
+Or fetch JSON for a custom widget:
+
+```
+GET https://YOUR_DEPLOYED_URL/api/embed?userId=YOUR_USER_ID
+```
+
+---
+
 ## Project Structure
 
 ```
@@ -86,8 +125,6 @@ ThirdEye/
       popup.js                  # Popup UI logic
     popup.html                  # Extension popup
     manifest.json               # MV3 manifest
-    vite.config.js              # Bundles background.js
-    vite.config.popup.js        # Bundles popup.js
   vscode-extension/
     src/
       extension.ts              # Activate, tick counter, flush interval
@@ -95,5 +132,20 @@ ThirdEye/
       git.ts                    # getTodayCommitCount() via git rev-list
       supabase.ts               # Supabase client + upsertTimeEntry()
     package.json                # Extension manifest + esbuild script
-    tsconfig.json               # TypeScript config
+  dashboard/
+    src/
+      app/
+        page.tsx                # Main dashboard (Server Component)
+        embed/[userId]/page.tsx # Public portfolio embed route
+        api/embed/route.ts      # JSON API for JS widget embed
+      components/
+        TotalTimeCards.tsx      # Monthly summary cards
+        DailyBarChart.tsx       # 30-day activity bar chart
+        ToolBreakdown.tsx       # AI tool pie chart
+        ProjectTable.tsx        # Projects + hours + commits
+        Heatmap.tsx             # GitHub-style activity heatmap
+        LiveIndicator.tsx       # Realtime "Active on X" indicator
+      lib/
+        supabase.ts             # Supabase client
+        queries.ts              # getDailySummary, getToolBreakdown, getProjects
 ```

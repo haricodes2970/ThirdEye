@@ -137,7 +137,7 @@ Embed your live AI usage stats anywhere with an iframe:
 
 ```html
 <iframe
-  src="https://srihariprasad.vercel.app/embed/YOUR_USER_ID"
+  src="https://thirdeye.srihariprasad.vercel.app/embed/YOUR_USER_ID"
   width="100%"
   height="220"
   frameborder="0"
@@ -148,7 +148,7 @@ Embed your live AI usage stats anywhere with an iframe:
 Or fetch JSON for a custom widget:
 
 ```
-GET https://srihariprasad.vercel.app/api/embed?userId=YOUR_USER_ID
+GET https://thirdeye.srihariprasad.vercel.app/api/embed?userId=YOUR_USER_ID
 ```
 
 ---

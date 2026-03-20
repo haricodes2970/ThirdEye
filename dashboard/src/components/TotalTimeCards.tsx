@@ -10,18 +10,29 @@ function formatMinutes(min: number) {
   return `${h}h ${m}m`;
 }
 
+const cardBase =
+  'rounded-2xl p-6 border border-white/10 backdrop-blur-md transition-all duration-300 hover:border-indigo-500/30 hover:shadow-[0_0_28px_rgba(99,102,241,0.12)]';
+
+const cardStyle = {
+  background: 'rgba(0,0,0,0.3)',
+};
+
 export default function TotalTimeCards({ aiMinutes, codeMinutes }: TotalTimeCardsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-        <p className="text-sm text-gray-400 mb-1">AI Tool Time — This Month</p>
-        <p className="text-3xl font-bold font-mono text-indigo-400">{formatMinutes(aiMinutes)}</p>
-        <p className="text-xs text-gray-500 mt-1">ChatGPT · Claude · Grok</p>
+      <div className={cardBase} style={cardStyle}>
+        <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">AI Tool Time — This Month</p>
+        <p className="text-4xl font-bold font-mono text-indigo-400 tracking-tight">
+          {formatMinutes(aiMinutes)}
+        </p>
+        <p className="text-xs text-gray-600 mt-2">ChatGPT · Claude · Grok</p>
       </div>
-      <div className="bg-gray-900 rounded-xl p-6 border border-gray-800">
-        <p className="text-sm text-gray-400 mb-1">Coding Time — This Month</p>
-        <p className="text-3xl font-bold font-mono text-indigo-400">{formatMinutes(codeMinutes)}</p>
-        <p className="text-xs text-gray-500 mt-1">VS Code · Cursor · Antigravity</p>
+      <div className={cardBase} style={cardStyle}>
+        <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Coding Time — This Month</p>
+        <p className="text-4xl font-bold font-mono text-purple-400 tracking-tight">
+          {formatMinutes(codeMinutes)}
+        </p>
+        <p className="text-xs text-gray-600 mt-2">VS Code · Cursor · Antigravity</p>
       </div>
     </div>
   );

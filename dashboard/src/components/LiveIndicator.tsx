@@ -30,8 +30,14 @@ export default function LiveIndicator({ userId }: { userId: string }) {
   if (!lastUpdate) return null;
 
   return (
-    <div className="flex items-center gap-2 text-sm text-green-400">
-      <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+    <div
+      className="flex items-center gap-2 text-xs text-green-300 px-3 py-1.5 rounded-full border border-green-500/20 backdrop-blur-md"
+      style={{ background: 'rgba(0,0,0,0.4)' }}
+    >
+      <span className="relative flex h-2 w-2">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400" />
+      </span>
       Active on {lastUpdate}
     </div>
   );

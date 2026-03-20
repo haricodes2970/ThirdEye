@@ -1,5 +1,5 @@
 const DEFAULT_TRACKERS = [
-  { name: 'ChatGPT', urlPattern: 'chat.openai.com' },
+  { name: 'ChatGPT', urlPattern: 'chatgpt.com' },
   { name: 'Claude',  urlPattern: 'claude.ai' },
   { name: 'Grok',   urlPattern: 'grok.x.ai' },
 ];

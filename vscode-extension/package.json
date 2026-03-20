@@ -1,0 +1,44 @@
+{
+  "name": "thirdeye-vscode",
+  "displayName": "ThirdEye",
+  "description": "Auto-track coding time, project, and commits",
+  "version": "1.0.0",
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Other"],
+  "activationEvents": ["onStartupFinished"],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "ThirdEye",
+      "properties": {
+        "thirdeye.supabaseUrl": {
+          "type": "string",
+          "default": "",
+          "description": "Your Supabase project URL"
+        },
+        "thirdeye.supabaseAnonKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your Supabase anon key"
+        },
+        "thirdeye.userId": {
+          "type": "string",
+          "default": "",
+          "description": "Your ThirdEye user UUID"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node",
+    "watch": "npm run compile -- --watch"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.85.0",
+    "esbuild": "^0.25.1",
+    "typescript": "^5.8.2"
+  }
+}

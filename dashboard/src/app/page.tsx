@@ -6,7 +6,7 @@ import ProjectTable from '@/components/ProjectTable';
 import Heatmap from '@/components/Heatmap';
 import LiveIndicator from '@/components/LiveIndicator';
 
-export const revalidate = 60; // revalidate every 60s
+export const revalidate = 60;
 
 export default async function Dashboard() {
   const userId = process.env.NEXT_PUBLIC_USER_ID!;
@@ -19,21 +19,40 @@ export default async function Dashboard() {
   ]);
 
   return (
-    <main className="min-h-screen bg-gray-950 text-gray-100 p-6 md:p-10 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">&#128065; ThirdEye</h1>
+    <main className="min-h-screen text-gray-100 p-6 md:p-10 max-w-6xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-10 fade-slide-up">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-white">
+            &#128065; ThirdEye
+          </h1>
+          <p className="text-xs text-gray-500 mt-0.5 uppercase tracking-widest">
+            AI &amp; Code Activity
+          </p>
+        </div>
         <LiveIndicator userId={userId} />
       </div>
 
-      <TotalTimeCards aiMinutes={monthly.aiMinutes} codeMinutes={monthly.codeMinutes} />
+      {/* Summary cards */}
+      <div className="fade-slide-up delay-100">
+        <TotalTimeCards aiMinutes={monthly.aiMinutes} codeMinutes={monthly.codeMinutes} />
+      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Charts grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 fade-slide-up delay-200">
         <DailyBarChart data={daily} />
         <ToolBreakdown data={tools} />
       </div>
 
-      <ProjectTable data={projects} />
-      <Heatmap data={daily} />
+      {/* Project table */}
+      <div className="fade-slide-up delay-300">
+        <ProjectTable data={projects} />
+      </div>
+
+      {/* Heatmap */}
+      <div className="fade-slide-up delay-400">
+        <Heatmap data={daily} />
+      </div>
     </main>
   );
 }

@@ -51,7 +51,7 @@ export default function DailyBarChart({ data }: DailyBarChartProps) {
             labelStyle={{ color: '#6b7280', fontSize: 11 }}
             itemStyle={{ color: '#818cf8', fontSize: 12, fontFamily: 'var(--font-geist-mono)' }}
             cursor={{ fill: 'rgba(99,102,241,0.06)' }}
-            formatter={(v: number) => [`${v}m`, 'Time']}
+            formatter={(v) => [`${v}m`, 'Time']}
           />
           <Bar dataKey="minutes" fill="url(#barGrad)" radius={[4, 4, 0, 0]}>
             <defs>

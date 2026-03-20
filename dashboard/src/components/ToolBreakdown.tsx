@@ -59,7 +59,7 @@ export default function ToolBreakdown({ data }: ToolBreakdownProps) {
           <Tooltip
             contentStyle={tooltipStyle}
             itemStyle={{ color: '#a5b4fc', fontSize: 12, fontFamily: 'var(--font-geist-mono)' }}
-            formatter={(v: number) => [`${v}m`, 'Time']}
+            formatter={(v) => [`${v}m`, 'Time']}
           />
           <Legend
             iconType="circle"

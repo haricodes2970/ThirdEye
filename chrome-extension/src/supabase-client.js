@@ -1,9 +1,9 @@
 import { createClient } from '@supabase/supabase-js';
 
-// ⚠️ REPLACE THESE with your Supabase project values
-const SUPABASE_URL = 'https://nxmusgkffmlfyizktgvz.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im54bXVzZ2tmZm1sZnlpemt0Z3Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM5OTkzNTQsImV4cCI6MjA4OTU3NTM1NH0.zRmGifgCbwO3QHs4OLT8KG_D8JvmoQaqtrIMCm1TaXM';
-const USER_ID = '712e7996-6a09-4656-b336-fd7a752c2a09'; // hardcoded single user
+// ⚠️ REPLACE WITH YOUR VALUES — see SETUP.md
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const USER_ID = 'YOUR_UUID'; // generate at uuidgenerator.net
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 

@@ -1,68 +1,64 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface DailyBarChartProps {
   data: { date: string; minutes: number }[];
 }
 
-const glassStyle = {
-  background: 'rgba(0,0,0,0.3)',
-};
-
-const tooltipStyle = {
-  background: 'rgba(5,5,15,0.85)',
-  border: '1px solid rgba(255,255,255,0.08)',
-  borderRadius: 10,
-  backdropFilter: 'blur(12px)',
-};
-
 export default function DailyBarChart({ data }: DailyBarChartProps) {
   const formatted = data.map(d => ({
-    ...d,
-    label: d.date.slice(5),
+    date: d.date.slice(5),
+    hours: Math.round((d.minutes / 60) * 10) / 10,
   }));
 
   return (
-    <div
-      className="rounded-2xl p-6 border border-white/10 backdrop-blur-md"
-      style={glassStyle}
-    >
-      <h2 className="text-xs font-semibold text-gray-500 mb-4 uppercase tracking-widest">
-        Daily Activity — Last 30 Days
-      </h2>
-      <ResponsiveContainer width="100%" height={200}>
-        <BarChart data={formatted} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-          <XAxis
-            dataKey="label"
-            tick={{ fill: '#4b5563', fontSize: 10, fontFamily: 'var(--font-geist-mono)' }}
-            interval="preserveStartEnd"
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            tick={{ fill: '#4b5563', fontSize: 10, fontFamily: 'var(--font-geist-mono)' }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip
-            contentStyle={tooltipStyle}
-            labelStyle={{ color: '#6b7280', fontSize: 11 }}
-            itemStyle={{ color: '#818cf8', fontSize: 12, fontFamily: 'var(--font-geist-mono)' }}
-            cursor={{ fill: 'rgba(99,102,241,0.06)' }}
-            formatter={(v) => [`${v}m`, 'Time']}
-          />
-          <Bar dataKey="minutes" fill="url(#barGrad)" radius={[4, 4, 0, 0]}>
-            <defs>
-              <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#818cf8" />
-                <stop offset="100%" stopColor="#4f46e5" stopOpacity={0.6} />
-              </linearGradient>
-            </defs>
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div className="bg-black/20 border border-white/5 rounded-xl p-4 flex flex-col">
+      <h3 className="text-sm font-medium text-gray-300 mb-4">Daily Activity</h3>
+      <div className="flex-1 min-h-[160px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={formatted} margin={{ top: 5, right: 0, left: -20, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" vertical={false} />
+            <XAxis
+              dataKey="date"
+              stroke="rgba(255,255,255,0.3)"
+              fontSize={10}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={20}
+            />
+            <YAxis
+              stroke="rgba(255,255,255,0.3)"
+              fontSize={10}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'rgba(15,23,42,0.85)',
+                border: '1px solid rgba(34,211,238,0.3)',
+                borderRadius: 8,
+                backdropFilter: 'blur(12px)',
+                color: '#fff',
+                boxShadow: '0 0 15px rgba(34,211,238,0.15)',
+              }}
+              itemStyle={{ color: '#22d3ee' }}
+              formatter={(v) => [`${v}h`, 'Hours']}
+            />
+            <Line
+              type="monotone"
+              dataKey="hours"
+              stroke="#22d3ee"
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={{ r: 5, fill: '#22d3ee', stroke: '#0f172a', strokeWidth: 2 }}
+              style={{ filter: 'drop-shadow(0 0 6px rgba(34,211,238,0.5))' }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

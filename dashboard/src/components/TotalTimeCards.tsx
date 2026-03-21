@@ -1,6 +1,8 @@
 interface TotalTimeCardsProps {
   aiMinutes: number;
   codeMinutes: number;
+  totalCommits: number;
+  projectCount: number;
 }
 
 function formatMinutes(min: number) {
@@ -10,30 +12,52 @@ function formatMinutes(min: number) {
   return `${h}h ${m}m`;
 }
 
-const cardBase =
-  'rounded-2xl p-6 border border-white/10 backdrop-blur-md transition-all duration-300 hover:border-indigo-500/30 hover:shadow-[0_0_28px_rgba(99,102,241,0.12)]';
+export default function TotalTimeCards({ aiMinutes, codeMinutes, totalCommits, projectCount }: TotalTimeCardsProps) {
+  const stats = [
+    {
+      label: 'Hours',
+      value: formatMinutes(codeMinutes),
+      icon: '⏱',
+      accent: 'text-cyan-400',
+      glow: 'drop-shadow-[0_0_8px_rgba(34,211,238,0.5)]',
+      labelColor: 'text-cyan-300',
+    },
+    {
+      label: 'Commits',
+      value: totalCommits.toString(),
+      icon: '⊕',
+      accent: 'text-emerald-400',
+      glow: 'drop-shadow-[0_0_8px_rgba(52,211,153,0.5)]',
+      labelColor: 'text-emerald-300',
+    },
+    {
+      label: 'Projects',
+      value: projectCount.toString(),
+      icon: '◈',
+      accent: 'text-fuchsia-400',
+      glow: 'drop-shadow-[0_0_8px_rgba(232,121,249,0.5)]',
+      labelColor: 'text-fuchsia-300',
+    },
+  ];
 
-const cardStyle = {
-  background: 'rgba(0,0,0,0.3)',
-};
-
-export default function TotalTimeCards({ aiMinutes, codeMinutes }: TotalTimeCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-      <div className={cardBase} style={cardStyle}>
-        <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">AI Tool Time — This Month</p>
-        <p className="text-4xl font-bold font-mono text-indigo-400 tracking-tight">
-          {formatMinutes(aiMinutes)}
-        </p>
-        <p className="text-xs text-gray-600 mt-2">ChatGPT · Claude · Grok</p>
-      </div>
-      <div className={cardBase} style={cardStyle}>
-        <p className="text-xs text-gray-500 uppercase tracking-widest mb-2">Coding Time — This Month</p>
-        <p className="text-4xl font-bold font-mono text-purple-400 tracking-tight">
-          {formatMinutes(codeMinutes)}
-        </p>
-        <p className="text-xs text-gray-600 mt-2">VS Code · Cursor · Antigravity</p>
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      {stats.map(stat => (
+        <div
+          key={stat.label}
+          className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col items-center justify-center hover:bg-white/10 transition-colors group"
+        >
+          <div className={`flex items-center space-x-2 ${stat.accent} mb-1 ${stat.glow}`}>
+            <span className="text-sm">{stat.icon}</span>
+            <span className={`text-xs font-semibold uppercase tracking-wider ${stat.labelColor}`}>
+              {stat.label}
+            </span>
+          </div>
+          <span className="text-3xl font-bold font-mono text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] transition-all">
+            {stat.value}
+          </span>
+        </div>
+      ))}
     </div>
   );
 }
